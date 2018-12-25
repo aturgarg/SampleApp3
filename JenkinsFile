@@ -3,6 +3,7 @@ pipeline {
     registry = "aturgarg/testrepo"
     registryCredential = 'dockerhub'
     dockerImage = ''
+    buildNumber = ''
   }
 agent any
 
@@ -15,19 +16,25 @@ stage ('Checkout') {
 stage('Building image') {
     steps{
       script {
-        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        buildNumber = ":$BUILD_NUMBER"
+        dockerImage =  docker.build registry + ":$BUILD_NUMBER"
+        // this will create an image with name aturgarg/testrepo:15 (15 is built number example and is a tag)
       }
     }
   }
 stage('Deploy Image') {
   steps{
     script {
-      docker.withRegistry( '', registryCredential ) {
+       docker.withRegistry( '', registryCredential ) {
         dockerImage.push()
-        // this will create an image with name aturgarg/testrepo:15 (15 is built number example and is a tag)
       }
     }
   }
 }
+stage('run image') {
+      steps {
+            sh 'docker run -d -p 19$BUILD_NUMBER:80 --name sampleapp3_a1_$BUILD_NUMBER aturgarg/testrepo:$BUILD_NUMBER'
+       }
+    }
  }
 }
