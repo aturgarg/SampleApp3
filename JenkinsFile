@@ -9,30 +9,15 @@ stage ('Checkout') {
                  git url: 'https://github.com/aturgarg/SampleApp3',branch: 'master'
             }
 }
-stage ('Restore PACKAGES') {     
+stage ('build docker') {     
          steps {
-             sh "dotnet restore --configfile NuGet.Config"
+             sh "docker build -t sampleapp3_a ."
           }
         }
-stage('Clean') {
+stage('docker run image') {
       steps {
-            sh 'dotnet clean'
+            sh 'docker run -d -p 19003:80 --name sampleapp3_a1_1 sampleapp3_a1'
        }
     }
-stage('Build') {
-     steps {
-             sh 'dotnet build --configuration Release'
-      }
-   }
-stage('Pack') {
-     steps {
-           sh 'dotnet pack --no-build --output nupkgs'
-      }
-   }
-stage('Publish') {
-      steps {
-            sh "dotnet nuget push **\\nupkgs\\*.nupkg -k yourApiKey -s http://myserver/artifactory/api/nuget/nuget-internal-stable/com/sample"
-       }
-   }
  }
 }
