@@ -1,31 +1,30 @@
 pipeline {
-environment {
-    registry = “gustavoapolinario/docker-test”
-    registryCredential = ‘dockerhub’
-    dockerImage = ‘’
+    environment {
+    registry = "aturgarg/testrepo"
+    registryCredential = 'dockerhub'
+    dockerImage = ''
   }
 agent any
+
 stages {
-stage ('Checkout from git') {
+stage ('Checkout') {
             steps {
                  git url: 'https://github.com/aturgarg/SampleApp3',branch: 'master'
             }
 }
-stage ('build docker') {     
-         steps {
-             sh "sudo docker build -t sampleapp3_a ."
-          }
-        }
-stage('docker run image') {
-      steps {
-            sh 'sudo docker run -d -p 19003:80 --name sampleapp3_a1_1 sampleapp3_a1'
-       }
+stage('Building image') {
+    steps{
+      script {
+        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+      }
     }
-stage(‘Deploy Image’) {
+  }
+stage('Deploy Image') {
   steps{
     script {
-      docker.withRegistry( ‘’, registryCredential ) {
+      docker.withRegistry( '', registryCredential ) {
         dockerImage.push()
+        // this will create an image with name aturgarg/testrepo:15 (15 is built number example and is a tag)
       }
     }
   }

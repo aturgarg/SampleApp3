@@ -1,0 +1,31 @@
+
+Details of useful link for Jenkins and docker integration
+
+Sample asp.net core app  at: https://github.com/aturgarg/SampleApp3
+
+
+Aim was to have a complete CI/CD environment on Ubuntu18x, using Kubernetes, docker, jenkins in addition to API gateway, service locater in future.
+
+To start with docker:
+Two of the most useful command in docker for running an asp.net core app are:
+        $ docker build -t aspnetapp .
+        $ docker run -d -p 8080:80 --name myapp aspnetapp
+
+ * https://medium.com/@gustavo.guss/jenkins-building-docker-image-and-sending-to-registry-64b84ea45ee9
+ * https://docs.docker.com/engine/examples/dotnetcore/#create-a-dockerfile-for-an-aspnet-core-application
+ * https://docs.docker.com/engine/reference/run/#general-form
+ * https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new?tabs=netcore21
+
+ Docker provide docker registry at dockerhub. It is free to create Public docker-image Repos.
+   https://docs.docker.com/registry/deploying/
+
+
+Jenkins:
+ * https://dzone.com/articles/continuous-integration-ci-for-net-core-projects-ne
+ * https://jenkins.io/doc/
+
+
+Docker to work as root (to support jenkins scripts, though a security concern)
+  * https://stackoverflow.com/questions/39638772/make-jenkins-run-docker-without-sudo
+
+
